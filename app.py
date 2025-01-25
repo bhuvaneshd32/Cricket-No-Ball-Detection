@@ -17,7 +17,7 @@ def predict_no_ball(image):
     return 'No Ball' if result[0][0] >= 0.5 else 'Legal Ball'
 
 # Directory containing test images
-image_dir = r'/Users/bhuvaneshd/Documents/Cricket-No-Ball-Detection/Final-test'
+image_dir = r'Final-test'
 
 # Get list of image files in the directory
 image_files = [f for f in os.listdir(image_dir) if f.endswith(('.jpeg', '.jpg', '.png'))]
