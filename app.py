@@ -4,7 +4,7 @@ import numpy as np
 import cv2
 from PIL import Image
 
-model_path = r'CNN Model\final_cnn.keras'
+model_path = r'CNN Model\final_model.keras'
 loaded_model = tf.keras.models.load_model(model_path)
 
 def predict_no_ball(image):
