@@ -1,17 +1,24 @@
 import streamlit as st
-import tensorflow as tf
-import numpy as np
+from tensorflow.keras.models import load_model
 import cv2
 from PIL import Image
 
 model_path = r'CNN Model\final_model.keras'
-loaded_model = tf.keras.models.load_model(model_path)
+loaded_model = load_model(model_path)
 
-def predict_no_ball(image):
-    image = image.resize((64, 64))
-    image = np.array(image)
-    image = np.expand_dims(image, axis=0)
-    result = loaded_model.predict(image)
+def predict_no_ball(image_pil):
+    from tensorflow.keras.preprocessing import image
+    from tensorflow import convert_to_tensor, expand_dims
+
+    image_pil = image_pil.resize((64, 64))
+    image_array = image.img_to_array(image_pil)
+    image_tensor = convert_to_tensor(image_array)
+    image_tensor = image_tensor / 255.0
+
+    image_tensor = expand_dims(image_tensor, axis=0)
+
+    result = loaded_model.predict(image_tensor)
+
     return 'No Ball' if result[0][0] >= 0.5 else 'Legal Ball'
 
 st.title("No Ball Detection System")
@@ -25,6 +32,9 @@ if uploaded_video is not None:
     video = uploaded_video.read()
     temp_video = r"temp\temp_video.mp4"
     temp_frame = r"temp\temp_frame.jpg"
+
+    import os
+    os.makedirs("temp", exist_ok=True)
 
     with open(temp_video, "wb") as f:
         f.write(video)
